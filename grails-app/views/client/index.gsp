@@ -10,26 +10,26 @@
 
 <body>
 
-<div class="row" id="idPath"></div>
+<div id="sites" class="container" style="align-items: flex-start">
+    <div class="row" id="idPath"></div>
 
-<br/>
-<div id="sites">
-    <select style="align-items: flex-start" class="alert-dark" id="selectSites" onchange="select.fetchData(this.value)">
+    <br/>
+    <select class="custom-select" style="width: 200px" id="selectSites"  onchange="select.fetchData(this.value)">
+        <option value="none"> Seleccionar Marca </option>
         <g:each in ="${sites}" var = 'site'>
-            <option  value ="${site?.id}"> ${site?.name}</option>
-
+            <option value ="${site?.id}"> ${site?.name}</option>
             ${site.id} ${site.name} <br/>
         </g:each>
     </select>
 
-    <div class="table table-striped">
+    <div class="table-responsive" id="tableCategory" >
         <table id="tabla" border="2"  >
             <thead>
             <tr>
-                <td style="color: #005cbf">Categoria</td>
+                <td style="color: #005cbf"><h3 aria-atomic="true">Lista de Articulos</h3></td>
             </tr>
             </thead>
-                <tr v-for="category in categories">
+                <tr  v-for="category in categories">
                     <td><a href="#" @click = "fetchData1(category.id)" > {{category.name}} </a></td>
                 </tr>
 
@@ -37,22 +37,83 @@
 
 
     </div>
-<div id="idForm" style="display: none">
-    <form>
-        <div class="form-group">
-            <label for="exampleInputEmail1">Nombre Marca</label>
-            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Nombre Marca">
-            <small id="emailHelp" class="form-text text-muted"></small>
-        </div>
-        <button type="submit" class="btn btn-primary">Crear</button>
-        <br/>
-    </form>
-
-</div>
 
     <br/>
-    <button type="button" onclick="select.crearMarca()" class="btn btn-default" data-dismiss="modal">Crear Marca</button>
-    <button type="button" onclick="select.crearArticulo()" class="btn btn-default" data-dismiss="modal">Crear Articulo</button>
+    <div class="row">
+        <div class="col-md-6">
+            <button id="idBootCrear" type="button" class="btn btn-primary btn-lg btn-block" onclick="select.abrirFormCrearMarca()" class="btn btn-default">Crear Marca</button>
+        </div>
+        <div class="col-md-6">
+            <button id="idBootArticulo" type="button" class="btn btn-primary btn-lg btn-block" onclick="select.abrirFormCrearArticulo()" class="btn btn-default">Crear Articulo</button>
+
+        </div>
+    </div>
+
+<br/>
+    <form id="idCrearMarca" class="form-check" style="display: none">
+    <div class="row">
+        <div class="col-md-6">
+
+                <div class="form-group row">
+                    <div class="col-sm-10">
+                        <input class="table-responsive"  id="nameMarca" placeholder="Ingresar el nombre de una Marca">
+                    </div>
+                </div>
+
+        </div>
+        <div class="col-md-6">
+            <div>
+                <button id="crearMarca" type="reset"  class="btn btn-primary btn-lg btn-block" onclick="select.createMarca()" class="btn btn-default">Crear Marca</button>
+            </div>
+        </div>
+    </div>
+    </form>
+
+    <br/>
+    <form id="idCreateArticulo" class="form-check" style="display: none">
+        <div class="row">
+            <div class="col-md-6">
+
+                <div class="form-group row">
+                    <div class="col-sm-10">
+                        <select class="custom-select" style="width: 450px" id="selectMarcaArticulo">
+                            <option value="none"> Seleccionar Marca </option>
+                            <g:each in ="${sites}" var = 'site'>
+                                <option value ="${site?.id}"> ${site?.name}</option>
+                                ${site.id} ${site.name} <br/>
+                            </g:each>
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-md-6">
+                <div>
+                    <input class="table-responsive"   id="nameArticulo" placeholder="Ingresar nombre del Articulo">
+                </div>
+            </div>
+
+        </div>
+        <br/>
+        <div class="row">
+            <div class="col-md-6">
+                <div>
+                    <input class="table-responsive"   id="pictureArticulo" placeholder="Ingresar url picture">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div>
+                    <button  id="crearArticulo" type="reset" onclick="select.createArticulo()"  class="btn btn-primary btn-lg btn-block" class="btn btn-default">Crear Articulo</button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+
+
+
+
 
     <div id="myModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
@@ -60,19 +121,41 @@
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
-                <h4 id="nombreCat" class="modal-title">ultimosDatos.name</h4>
+                <h3 id="nombreCat" class="modal-title">ultimosDatos.name</h3>
             </div>
             <div class="modal-body">
-                <p id="idModal"> ID: {{ultimosDatos.id}}</>
+                <p id="idModal"> ID: {{ultimosDatos.id}}</p>
                 <p id="nameModal">NAME: {{ultimosDatos.name}}</p>
-                <p> PICTURE: <img class="img-fluid" style="max-height: 150px;" id="pictureModal"></p>>
+                <p> PICTURE: <img class="img-fluid" style="max-height: 150px;" id="pictureModal"></p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                <button type="button" onclick="select.deleteArticulo()" class="btn btn-default" >Eliminar</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Editar</button>
+                <button type="button" class="btn btn-lg btn-primary" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-lg btn-primary" onclick="select.abrirForm()" class="btn btn-default">Edit</button>
+                <button type="button" class="btn btn-lg btn-primary" onclick="select.deleteArticulo()" class="btn btn-default" >Delete</button>
+
             </div>
+
+            <div id="idForm" role="dialog" class="modal-body" style="display: none">
+                <form>
+                  <div class="form-group">
+                     <label for="idName">Name</label>
+                     <input class="form-control" id="idName" aria-describedby="emailHelp" placeholder="Nombre Articulo">
+                     <small id="emailHelp" class="form-text text-muted"></small>
+                  </div>
+                    <div class="modal-body">
+                        <label for="idPicture">Picture</label>
+                        <input class="form-control" id="idPicture" aria-describedby="emailHelp" placeholder="Url Imagen">
+                        <small id="emailHelp1" class="form-text text-muted"></small>
+                    </div>
+                    <br/>
+                <button type="submit" onclick="select.editArticulo()" class="btn btn-primary btn-lg btn-block" data-dismiss="modal" class="btn btn-primary">Submit</button>
+                <br/>
+            </form>
+
         </div>
+
+
+    </div>
 
     </div>
 </div>
@@ -139,6 +222,7 @@
                 })
               },
             crearPath: function (id) {
+                console.log(id);
                 axios.get('/client/listCategory', {
                     params: {
                         id: id
@@ -189,15 +273,84 @@
                     }
                 }).then(function (response) {
                     select.statusCode = response.data.resultado;
+                    alert("Se borro el Articulo");
                     $('#myModal').modal('hide');
+
 
                 }).catch(function (error) {
                     console.log(error);
                 })
             },
-            crearMarca: function () {
+            abrirForm: function (){
                 document.getElementById("idForm").style.display = "";
-                //falta tomar el valor y hacer el post
+            },
+            abrirFormCrearMarca: function () {
+                document.getElementById("idBootCrear").style.display = 'none';
+                document.getElementById("idBootArticulo").style.display = 'none';
+                document.getElementById("idCrearMarca").style.display = "";
+            },
+            abrirFormCrearArticulo: function(){
+                document.getElementById("idBootCrear").style.display = 'none';
+                document.getElementById("idBootArticulo").style.display = 'none';
+                document.getElementById("idCreateArticulo").style.display = "";
+            },
+            editArticulo: function () {
+                var data = {
+                    "name": document.getElementById("idName").value,
+                    "picture": document.getElementById("idPicture").value,
+                   // "total_items_in_this_category": parseInt(this.$refs.totalItemsInput.value),
+                    "marca": parseInt(document.getElementById("selectSites").value),
+                }
+                axios.get('/client/editArticulo',{
+                    params: {
+                        id : itemId,
+                        data: data
+                    }
+                }).then(function (response) {
+                    document.forms['idForm'].reset();
+                    alert("Se Edito el Articulo");
+                }).catch(function (error) {
+                    console.log(error)
+                })
+            },
+            createMarca: function () {
+                var dataMarca = {
+                    "name": document.getElementById("nameMarca").value,
+                }
+                axios.get('/client/createMarca',{
+                    params: {
+                        data: dataMarca
+                    }
+                }).then(function (response) {
+                    document.forms['idForm'].reset();
+                    alert("Se creo la marca");
+                    document.getElementById("idBootCrear").style.display = "";
+                    document.getElementById("idCrearMarca").style.display = 'none';
+                }).catch(function (error) {
+                    console.log(error)
+                })
+            },
+
+            createArticulo: function () {
+                var dataMarca = {
+                    "name": document.getElementById("nameArticulo").value,
+                    "picture": document.getElementById("pictureArticulo").value,
+                    // "total_items_in_this_category": parseInt(this.$refs.totalItemsInput.value),
+                    "marca": parseInt(document.getElementById("selectMarcaArticulo").value),
+                }
+                axios.get('/client/createArticulo',{
+                    params: {
+                        data: dataMarca
+                    }
+                }).then(function (response) {
+                    document.forms['idForm'].reset();
+                    alert("Se creo el articulo");
+                    document.getElementById("idBootCrear").style.display = "";
+                    document.getElementById("idBootArticulo").style.display = "";
+                    document.getElementById("crearArticulo").style.display = 'none';
+                }).catch(function (error) {
+                    console.log(error)
+                })
             }
 
         }
@@ -207,6 +360,7 @@
 
 <script>
     document.getElementById("mercadoLibre").style.color = "black";
+
 </script>
 
 </body>
